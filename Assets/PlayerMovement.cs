@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+
+
     [SerializeField]
     float moveSpeed = 6;
 
@@ -16,6 +19,10 @@ public class PlayerMovement : MonoBehaviour
     bool touchingFloor = false;
 
     
+
+    [SerializeField]
+    Transform Cam;
+
     Rigidbody rb;
     // Start is called before the first frame update
     void Start()
@@ -40,16 +47,27 @@ public class PlayerMovement : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-       rb.velocity = new Vector3(h * moveSpeed, rb.velocity.y, v * moveSpeed);
+        Vector3 camForward = Cam.forward;
+        Vector3 camRight = Cam.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 moveDirection = (camForward * v * moveSpeed) + (camRight * h * moveSpeed);
+        
+
+        rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
 
         if (Input.GetButtonDown("Jump"))
         {
             Jump(touchingFloor);
 
         }
+        
+       
 
-        
-        
     }
 
     void Jump(bool a)
@@ -63,14 +81,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if(other.gameObject.tag == "killZ")
+        SceneManager.LoadScene(2);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Coin")
-        {
-            Destroy(collision.gameObject);
-        }
-    }
+    
 }

@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class CoinScript : MonoBehaviour
+public class endGame : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -17,12 +18,11 @@ public class CoinScript : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+
+    public void pressedRestart()
     {
-        GameManager.instance.AddScore(SceneManager.GetActiveScene().buildIndex + 1);
-        
+        SceneManager.LoadScene(0);
 
     }
-
 
 }
